@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a0e17">
+<title>Portfolio</title>
+<style>
+  :root{--bg:#0a0e17;--panel:#121826;--text:#e6ebf5;--muted:#8d99b0;--accent:#3b82f6;--line:#1f2937}
+  :root.kunduz{--bg:#f6f8fc;--panel:#ffffff;--text:#111827;--muted:#5b6678;--accent:#2563eb;--line:#d9e0ec}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  header{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);z-index:5}
+  nav{max-width:860px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .logo{font-weight:700;color:var(--accent);border:2px solid var(--accent);border-radius:8px;padding:2px 8px}
+  nav .gap{flex:1}
+  nav a.m{color:var(--muted)}
+  button{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer;font:inherit}
+  button:hover{border-color:var(--accent)}
+  main{max-width:860px;margin:0 auto;padding:0 18px 60px}
+  section{padding:42px 0 6px}
+  h2{font-size:1.3rem;margin:0 0 14px;color:var(--accent)}
+  .hero{display:flex;gap:24px;align-items:center;padding-top:44px;flex-wrap:wrap}
+  .foto{width:132px;height:132px;border-radius:50%;border:3px solid var(--accent);object-fit:cover;background:var(--panel);display:flex;align-items:center;justify-content:center;font-size:2.6rem;font-weight:700;color:var(--accent)}
+  h1{margin:0;font-size:2rem}
+  .kasb{color:var(--muted);margin:4px 0 14px}
+  .btn{display:inline-block;background:var(--accent);color:#fff;border-radius:8px;padding:8px 16px}
+  .btn:hover{text-decoration:none;opacity:.9}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:4px 14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:12px}
+  .card b{display:block;margin-bottom:2px}
+  .card p{margin:0;color:var(--muted)}
+  footer{text-align:center;color:var(--muted);font-size:.85rem;padding:24px 18px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<header>
+  <nav>
+    <a class="logo" href="#top" id="belgi">IF</a>
+    <a class="m" href="#haqida" data-t="n_haqida"></a>
+    <a class="m" href="#konikmalar" data-t="n_kon"></a>
+    <a class="m" href="#loyihalar" data-t="n_loy"></a>
+    <a class="m" href="#aloqa" data-t="n_aloqa"></a>
+    <span class="gap"></span>
+    <button id="til" type="button">UZ | EN</button>
+    <button id="rejim" type="button" aria-label="Rejim">🌙</button>
+  </nav>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <div id="fotoJoy"></div>
+    <div>
+      <h1 id="ism"></h1>
+      <p class="kasb" id="kasb"></p>
+      <a class="btn" id="rezyumeBtn" href="#" hidden data-t="rezyume"></a>
+    </div>
+  </div>
+
+  <section id="haqida"><h2 data-t="n_haqida"></h2><p id="haqidaMatn"></p></section>
+  <section id="konikmalar"><h2 data-t="n_kon"></h2><div class="chips" id="konList"></div></section>
+  <section id="loyihalar"><h2 data-t="n_loy"></h2><div id="loyList"></div></section>
+  <section id="aloqa"><h2 data-t="n_aloqa"></h2><div class="chips" id="aloqaList"></div></section>
+</main>
+
+<footer id="oyoq"></footer>
+
+<script src="malumot.js"></script>
+<script>
+(function () {
+  var M = MALUMOT;
+  var MATN = {
+    uz: { n_haqida: "Haqimda", n_kon: "Ko'nikmalar", n_loy: "Loyihalar", n_aloqa: "Aloqa", rezyume: "Rezyumeni ochish", oyoq: "Bu sayt AI yordamida yaratilgan shablondan tuzilgan." },
+    en: { n_haqida: "About", n_kon: "Skills", n_loy: "Projects", n_aloqa: "Contact", rezyume: "Open resume", oyoq: "This site is built from an AI-assisted template." }
+  };
+  var til = "uz";
+  try { til = localStorage.getItem("til") || "uz"; } catch (e) {}
+
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  function xavfsizHavola(u) { return /^(https?:|mailto:)/i.test(u) ? u : "#"; }
+
+  function chiz() {
+    var t = MATN[til];
+    document.documentElement.lang = til;
+    document.title = M.ism;
+    document.getElementById("belgi").textContent = M.belgi;
+    document.getElementById("ism").textContent = M.ism;
+    document.getElementById("kasb").textContent = M.kasb[til];
+    document.getElementById("haqidaMatn").textContent = M.haqida[til];
+    document.getElementById("oyoq").textContent = "© " + M.ism + " · " + t.oyoq;
+    document.querySelectorAll("[data-t]").forEach(function (n) { n.textContent = t[n.getAttribute("data-t")]; });
+
+    var joy = document.getElementById("fotoJoy"); joy.textContent = "";
+    if (M.rasm) {
+      var img = el("img", "foto"); img.alt = M.ism; img.src = M.rasm;
+      img.onerror = function () { joy.textContent = ""; joy.appendChild(el("div", "foto", M.belgi)); };
+      joy.appendChild(img);
+    } else { joy.appendChild(el("div", "foto", M.belgi)); }
+
+    var rb = document.getElementById("rezyumeBtn");
+    if (M.rezyume) { rb.href = M.rezyume; rb.hidden = false; } else { rb.hidden = true; }
+
+    var k = document.getElementById("konList"); k.textContent = "";
+    M.konikmalar.forEach(function (s) { k.appendChild(el("span", "chip", s)); });
+
+    var l = document.getElementById("loyList"); l.textContent = "";
+    M.loyihalar.forEach(function (p) {
+      var c = el("div", "card"), b = el("b");
+      var a = el("a", "", p.nom); a.href = xavfsizHavola(p.havola); a.target = "_blank"; a.rel = "noopener";
+      b.appendChild(a); c.appendChild(b); c.appendChild(el("p", "", p.tavsif[til]));
+      l.appendChild(c);
+    });
+
+    var q = document.getElementById("aloqaList"); q.textContent = "";
+    var nomlar = { linkedin: "LinkedIn", github: "GitHub", telegram: "Telegram", pochta: "Email" };
+    ["linkedin", "github", "telegram", "pochta"].forEach(function (key) {
+      var v = M.aloqa[key]; if (!v) return;
+      var a = el("a", "chip", nomlar[key]);
+      a.href = key === "pochta" ? "mailto:" + v : xavfsizHavola(v);
+      if (key !== "pochta") { a.target = "_blank"; a.rel = "noopener"; }
+      q.appendChild(a);
+    });
+  }
+
+  document.getElementById("til").onclick = function () {
+    til = til === "uz" ? "en" : "uz";
+    try { localStorage.setItem("til", til); } catch (e) {}
+    chiz();
+  };
+
+  var root = document.documentElement, rejim = document.getElementById("rejim");
+  function rejimBelgi() { rejim.textContent = root.classList.contains("kunduz") ? "☀️" : "🌙"; }
+  try { if (localStorage.getItem("rejim") === "kunduz") root.classList.add("kunduz"); } catch (e) {}
+  rejim.onclick = function () {
+    root.classList.toggle("kunduz");
+    try { localStorage.setItem("rejim", root.classList.contains("kunduz") ? "kunduz" : "tun"); } catch (e) {}
+    rejimBelgi();
+  };
+  rejimBelgi();
+  chiz();
+})();
+</script>
+</body>
+</html>
